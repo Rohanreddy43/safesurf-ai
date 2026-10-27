@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "SafeSurf AI - Search SiteAdvisor & Phishing Shield",
+  "version": "2.0.0",
+  "description": "Injects real-time safety verification badges next to Google search results, inspired by McAfee SiteAdvisor.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["http://localhost:8000/*", "https://*.google.com/*", "https://*.bing.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SafeSurf AI Scanner"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/search*",
+        "https://google.com/search*",
+        "https://www.google.co.in/search*",
+        "https://www.google.co.uk/search*",
+        "https://www.google.ca/search*",
+        "https://www.bing.com/search*",
+        "https://duckduckgo.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ]
+}

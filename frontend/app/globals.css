@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+/*
+ * Theme switching
+ * ---------------
+ * `<html class="dark">` is the single source of truth. It is toggled by the
+ * navbar and restored *before first paint* by the inline script in
+ * app/layout.tsx, so the chosen theme survives reloads without a flash of the
+ * wrong theme.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Tokens that must stay identical in both themes. */
+@theme {
+  /* Text sitting on bright accent surfaces (cyan / blue buttons + gradients). */
+  --color-accent-foreground: #04121f;
+}
+
+/*
+ * SafeSurf AI is designed dark-first: components paint their surfaces, borders
+ * and text with the Tailwind `slate` ramp plus light accent shades. To make the
+ * theme switch repaint the *whole* app instead of a handful of elements, those
+ * ramps are routed through CSS variables here. Dark mode keeps the stock
+ * Tailwind values; light mode uses an inverted / darkened ramp. Every existing
+ * bg-/text-/border-/from-/to-slate-* and accent utility therefore follows the
+ * active theme automatically, with no per-component edits.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+
+  --color-slate-50: var(--ss-slate-50);
+  --color-slate-100: var(--ss-slate-100);
+  --color-slate-200: var(--ss-slate-200);
+  --color-slate-300: var(--ss-slate-300);
+  --color-slate-400: var(--ss-slate-400);
+  --color-slate-500: var(--ss-slate-500);
+  --color-slate-600: var(--ss-slate-600);
+  --color-slate-700: var(--ss-slate-700);
+  --color-slate-800: var(--ss-slate-800);
+  --color-slate-900: var(--ss-slate-900);
+  --color-slate-950: var(--ss-slate-950);
+
+  --color-cyan-200: var(--ss-cyan-200);
+  --color-cyan-300: var(--ss-cyan-300);
+  --color-cyan-400: var(--ss-cyan-400);
+  --color-rose-300: var(--ss-rose-300);
+  --color-rose-400: var(--ss-rose-400);
+  --color-rose-500: var(--ss-rose-500);
+  --color-emerald-300: var(--ss-emerald-300);
+  --color-emerald-400: var(--ss-emerald-400);
+  --color-amber-300: var(--ss-amber-300);
+  --color-amber-400: var(--ss-amber-400);
+  --color-sky-300: var(--ss-sky-300);
+  --color-indigo-300: var(--ss-indigo-300);
+  --color-indigo-400: var(--ss-indigo-400);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* ------------------------------------------------------------ light mode --- */
+:root {
+  color-scheme: light;
+
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --border: #e2e8f0;
+
+  /* slate ramp, inverted so dark-designed surfaces become light */
+  --ss-slate-50: #020617;
+  --ss-slate-100: #0f172a;
+  --ss-slate-200: #1e293b;
+  --ss-slate-300: #334155;
+  --ss-slate-400: #475569;
+  --ss-slate-500: #64748b;
+  --ss-slate-600: #94a3b8;
+  --ss-slate-700: #cbd5e1;
+  --ss-slate-800: #e2e8f0;
+  --ss-slate-900: #ffffff;
+  --ss-slate-950: #f8fafc;
+
+  /* accent text, darkened to stay readable on light surfaces */
+  --ss-cyan-200: #155e75;
+  --ss-cyan-300: #0e7490;
+  --ss-cyan-400: #0891b2;
+  --ss-rose-300: #be123c;
+  --ss-rose-400: #e11d48;
+  --ss-rose-500: #e11d48;
+  --ss-emerald-300: #047857;
+  --ss-emerald-400: #059669;
+  --ss-amber-300: #b45309;
+  --ss-amber-400: #d97706;
+  --ss-sky-300: #0369a1;
+  --ss-indigo-300: #4338ca;
+  --ss-indigo-400: #4f46e5;
+}
+
+/* ------------------------------------------------------------- dark mode --- */
+html.dark {
+  color-scheme: dark;
+
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --border: #334155;
+
+  /* slate ramp, stock Tailwind values */
+  --ss-slate-50: #f8fafc;
+  --ss-slate-100: #f1f5f9;
+  --ss-slate-200: #e2e8f0;
+  --ss-slate-300: #cbd5e1;
+  --ss-slate-400: #94a3b8;
+  --ss-slate-500: #64748b;
+  --ss-slate-600: #475569;
+  --ss-slate-700: #334155;
+  --ss-slate-800: #1e293b;
+  --ss-slate-900: #0f172a;
+  --ss-slate-950: #020617;
+
+  /* accent text, stock Tailwind values */
+  --ss-cyan-200: #a5f3fc;
+  --ss-cyan-300: #67e8f9;
+  --ss-cyan-400: #22d3ee;
+  --ss-rose-300: #fda4af;
+  --ss-rose-400: #fb7185;
+  --ss-rose-500: #f43f5e;
+  --ss-emerald-300: #6ee7b7;
+  --ss-emerald-400: #34d399;
+  --ss-amber-300: #fcd34d;
+  --ss-amber-400: #fbbf24;
+  --ss-sky-300: #7dd3fc;
+  --ss-indigo-300: #a5b4fc;
+  --ss-indigo-400: #818cf8;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Arial, Helvetica, sans-serif;
+}

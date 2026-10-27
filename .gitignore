@@ -1,0 +1,52 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+venv/
+backend/venv/
+.venv/
+backend/.venv/
+env/
+
+# Next.js & Build outputs
+.next/
+frontend/.next/
+out/
+build/
+dist/
+.vercel/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+backend/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.mypy_cache/
+
+# Databases
+*.sqlite
+*.sqlite3
+*.db
+backend/*.db
+safesurf.db
+backend/safesurf.db
+
+# Environment & Credentials
+.env
+.env.*
+!.env.example
+*.pem
+browser-extension.pem
+browser-extension.crx
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
