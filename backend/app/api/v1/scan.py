@@ -92,7 +92,7 @@ async def get_history(
         query = query.filter(or_(ScanReport.url.icontains(search), ScanReport.domain.icontains(search)))
 
     if status_filter:
-        query = query.filter(ScanReport.status == status_filter.lower())
+        query = query.filter(func.lower(ScanReport.status) == status_filter.lower())
 
     if saved_only:
         query = query.filter(ScanReport.is_saved == True)
@@ -135,13 +135,13 @@ async def get_stats(db: AsyncSession = Depends(get_db)):
     res_total = await db.execute(select(func.count(ScanReport.id)))
     total_scans = res_total.scalar() or 0
 
-    res_safe = await db.execute(select(func.count(ScanReport.id)).filter(ScanReport.status == "safe"))
+    res_safe = await db.execute(select(func.count(ScanReport.id)).filter(func.lower(ScanReport.status) == "safe"))
     safe_cnt = res_safe.scalar() or 0
 
-    res_susp = await db.execute(select(func.count(ScanReport.id)).filter(ScanReport.status == "suspicious"))
+    res_susp = await db.execute(select(func.count(ScanReport.id)).filter(func.lower(ScanReport.status) == "suspicious"))
     susp_cnt = res_susp.scalar() or 0
 
-    res_mal = await db.execute(select(func.count(ScanReport.id)).filter(ScanReport.status == "malicious"))
+    res_mal = await db.execute(select(func.count(ScanReport.id)).filter(func.lower(ScanReport.status) == "malicious"))
     mal_cnt = res_mal.scalar() or 0
 
     return GlobalStats(
