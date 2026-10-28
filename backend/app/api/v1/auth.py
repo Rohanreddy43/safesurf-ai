@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import func
 
 from app.db.session import get_db
 from app.models.user import User
@@ -12,12 +13,12 @@ router = APIRouter()
 
 @router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 async def register(user_in: UserRegister, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).filter(User.email == user_in.email))
+    result = await db.execute(select(User).filter(func.lower(User.email) == user_in.email.lower()))
     existing_user = result.scalars().first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="A user with this email already exists."
+            detail="An account with this email/username already exists."
         )
 
     # First user is automatically assigned admin role for easy testing
@@ -26,7 +27,7 @@ async def register(user_in: UserRegister, db: AsyncSession = Depends(get_db)):
     role = "admin" if user_count == 0 else "user"
 
     user = User(
-        email=user_in.email,
+        email=user_in.email.lower(),
         full_name=user_in.full_name,
         hashed_password=get_password_hash(user_in.password),
         role=role
@@ -40,12 +41,12 @@ async def register(user_in: UserRegister, db: AsyncSession = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 async def login(credentials: UserLogin, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).filter(User.email == credentials.email))
+    result = await db.execute(select(User).filter(func.lower(User.email) == credentials.email.lower()))
     user = result.scalars().first()
     if not user or not verify_password(credentials.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password."
+            detail="Incorrect email/username or password."
         )
     if not user.is_active:
         raise HTTPException(
@@ -62,7 +63,7 @@ async def get_me(current_user: User = Depends(get_current_user)):
 
 @router.post("/reset-password")
 async def reset_password(data: PasswordReset, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).filter(User.email == data.email))
+    result = await db.execute(select(User).filter(func.lower(User.email) == data.email.lower()))
     user = result.scalars().first()
     if not user:
         raise HTTPException(

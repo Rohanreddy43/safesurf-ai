@@ -19,8 +19,8 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await api.login(email, password);
-      router.push('/dashboard');
+      await api.login(email.trim(), password);
+      window.location.href = '/dashboard';
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.');
     } finally {

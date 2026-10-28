@@ -20,8 +20,8 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await api.register(email, password, fullName);
-      router.push('/dashboard');
+      await api.register(email.trim(), password, fullName.trim());
+      window.location.href = '/dashboard';
     } catch (err: any) {
       setError(err.message || 'Registration failed.');
     } finally {

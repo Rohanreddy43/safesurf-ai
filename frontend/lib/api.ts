@@ -77,7 +77,18 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     let errMessage = 'API Request Failed';
     try {
       const errData = await res.json();
-      errMessage = errData.detail || errData.message || errMessage;
+      if (Array.isArray(errData.detail)) {
+        errMessage = errData.detail
+          .map((e: any) => {
+            const field = Array.isArray(e.loc) && e.loc.length > 0 ? e.loc[e.loc.length - 1] : '';
+            return field && field !== 'body' ? `${field}: ${e.msg}` : e.msg;
+          })
+          .join(', ');
+      } else if (typeof errData.detail === 'string') {
+        errMessage = errData.detail;
+      } else if (errData.message) {
+        errMessage = errData.message;
+      }
     } catch {}
     throw new Error(errMessage);
   }
